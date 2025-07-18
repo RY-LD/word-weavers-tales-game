@@ -37,7 +37,6 @@
             pointer-events: none;
         }
         
-        /* 主界面样式 */
         #main-menu {
             background: url('https://source.unsplash.com/random/1600x900/?magic,castle') center/cover no-repeat;
             position: relative;
@@ -92,7 +91,6 @@
             box-shadow: 0 0 25px rgba(114, 9, 183, 0.9);
         }
         
-        /* 游戏界面样式 */
         #game-screen {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             padding: 20px;
@@ -134,6 +132,7 @@
             border-radius: 10px;
             margin-bottom: 20px;
             min-height: 200px;
+            position: relative;
         }
         
         .story-text {
@@ -151,6 +150,7 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 20px;
+            justify-content: center;
         }
         
         .option {
@@ -159,11 +159,22 @@
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .option:hover {
             transform: scale(1.05);
             box-shadow: 0 0 10px rgba(67, 97, 238, 0.7);
+        }
+        
+        .option.highlighted {
+            animation: highlight 1.5s infinite;
+        }
+        
+        @keyframes highlight {
+            0%, 100% { box-shadow: 0 0 10px rgba(249, 199, 79, 0.7); }
+            50% { box-shadow: 0 0 20px rgba(249, 199, 79, 1); }
         }
         
         .owl-helper {
@@ -184,7 +195,6 @@
             box-shadow: 0 0 25px rgba(249, 199, 79, 0.9);
         }
         
-        /* 结束界面样式 */
         #end-screen {
             background: url('https://source.unsplash.com/random/1600x900/?magic,stars') center/cover no-repeat;
             position: relative;
@@ -241,30 +251,18 @@
             font-size: 24px;
             color: #f9c74f;
             box-shadow: 0 0 15px rgba(114, 9, 183, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(114, 9, 183, 0.9);
         }
         
         .end-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
-        }
-        
-        @media (max-width: 768px) {
-            .title {
-                font-size: 3rem;
-            }
-            
-            .game-header {
-                flex-wrap: wrap;
-            }
-            
-            .end-title {
-                font-size: 2rem;
-            }
-            
-            .badges {
-                flex-wrap: wrap;
-            }
         }
         
         .fill-blank {
@@ -311,17 +309,231 @@
             0%, 100% { background-color: transparent; }
             50% { background-color: rgba(235, 77, 75, 0.5); }
         }
+        
+        .feedback-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feedback-message.show {
+            opacity: 1;
+        }
+        
+        .tutorial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tutorial-box {
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border: 2px solid #f9c74f;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .tutorial-title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2rem;
+            color: #f9c74f;
+            margin-bottom: 15px;
+        }
+        
+        .tutorial-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .magic-book {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #7209b7, #3f37c9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(114, 9, 183, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .magic-book:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(114, 9, 183, 0.9);
+        }
+        
+        .book-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .book-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .book-content {
+            background: url('https://source.unsplash.com/random/800x600/?book,magic') center/cover;
+            width: 80%;
+            max-width: 800px;
+            height: 80%;
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .book-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 20px;
+            z-index: -1;
+        }
+        
+        .book-title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2.5rem;
+            color: #f9c74f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .book-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #f9c74f;
+            transition: all 0.3s ease;
+        }
+        
+        .book-close:hover {
+            transform: scale(1.2);
+        }
+        
+        .spell-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .spell-card {
+            background: rgba(67, 97, 238, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .spell-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.5);
+        }
+        
+        .spell-name {
+            font-size: 1.2rem;
+            color: #f9c74f;
+            margin-bottom: 10px;
+        }
+        
+        .spell-desc {
+            font-size: 0.9rem;
+            color: #fff;
+        }
+        
+        .spell-status {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .status-learned {
+            background: rgba(72, 219, 121, 0.5);
+        }
+        
+        .status-available {
+            background: rgba(249, 199, 79, 0.5);
+        }
+        
+        .status-locked {
+            background: rgba(235, 77, 75, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+            }
+            
+            .game-header {
+                flex-wrap: wrap;
+            }
+            
+            .end-title {
+                font-size: 2rem;
+            }
+            
+            .badges {
+                flex-wrap: wrap;
+            }
+            
+            .spell-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- 主界面 -->
     <div id="main-menu" class="screen">
         <h1 class="title">文字魔法学院</h1>
         <p class="subtitle">Word Weavers' Tales</p>
         <button id="start-btn" class="btn">开始冒险</button>
     </div>
     
-    <!-- 游戏界面 -->
     <div id="game-screen" class="screen hidden">
         <div class="game-header">
             <div class="level">
@@ -345,22 +557,23 @@
         <div class="story-container">
             <p id="story-text" class="story-text"></p>
             <div id="puzzle-container" class="puzzle-container"></div>
+            <div id="feedback-message" class="feedback-message"></div>
         </div>
         
         <div id="options-container" class="options-container"></div>
         
         <div id="owl-helper" class="owl-helper"></div>
+        <div id="magic-book" class="magic-book">📖</div>
     </div>
     
-    <!-- 结束界面 -->
     <div id="end-screen" class="screen hidden">
         <div class="end-container">
             <h2 id="end-title" class="end-title">恭喜通关!</h2>
             <p id="final-score" class="final-score">最终得分: 0</p>
             <div class="badges">
-                <div class="badge">🏆</div>
-                <div class="badge">🌟</div>
-                <div class="badge">🧙</div>
+                <div class="badge" title="完成所有谜题">🏆</div>
+                <div class="badge" title="达到高分">🌟</div>
+                <div class="badge" title="魔法大师">🧙</div>
             </div>
             <div class="end-buttons">
                 <button id="play-again-btn" class="btn">再玩一次</button>
@@ -368,9 +581,24 @@
             </div>
         </div>
     </div>
+    
+    <div id="tutorial-overlay" class="tutorial-overlay hidden">
+        <div class="tutorial-box">
+            <h3 class="tutorial-title">欢迎来到文字魔法学院!</h3>
+            <p class="tutorial-text">在这里，你将学习如何使用文字的力量解决谜题。每个谜题都有线索，仔细阅读故事，选择正确的答案。如果遇到困难，可以点击右下角的猫头鹰获取提示。</p>
+            <button id="tutorial-next" class="btn">开始学习</button>
+        </div>
+    </div>
+    
+    <div id="book-modal" class="book-modal">
+        <div class="book-content">
+            <div id="book-close" class="book-close">×</div>
+            <h3 class="book-title">魔法书</h3>
+            <div class="spell-grid" id="spell-grid"></div>
+        </div>
+    </div>
 
     <script>
-        // 游戏数据
         const gameData = {
             puzzles: [
                 {
@@ -378,7 +606,8 @@
                     story: "小魔法师艾莉在魔法森林里迷路了。她记得老师说过：\"当你迷路时，可以用'指南针'咒语找到方向。\"这个咒语是：\"北方指引，_____，带我回家。\"",
                     answer: "星光闪烁",
                     options: ["星光闪烁", "月亮高悬", "太阳升起", "云雾缭绕"],
-                    hint: "夜空中最亮的是什么？"
+                    hint: "夜空中最亮的是什么？",
+                    difficulty: "easy"
                 },
                 {
                     type: "sentenceOrder",
@@ -390,36 +619,38 @@
                         "最后搅拌三次，顺时针方向"
                     ],
                     correctOrder: [0, 1, 2, 3],
-                    hint: "想想看，液体应该先放还是后放？"
+                    hint: "想想看，液体应该先放还是后放？",
+                    difficulty: "medium"
                 },
                 {
                     type: "fillBlank",
                     story: "古老的魔法书上写着：\"要唤醒沉睡的石像，必须念出咒语：'石心苏醒，_____，展现真形。'\"",
                     answer: "灵魂归位",
                     options: ["灵魂归位", "力量觉醒", "魔法释放", "时光倒流"],
-                    hint: "石像缺少什么才能活过来？"
+                    hint: "石像缺少什么才能活过来？",
+                    difficulty: "hard"
                 }
+            ],
+            spells: [
+                { name: "星光闪烁", description: "照亮前方道路的咒语", status: "locked" },
+                { name: "灵魂归位", description: "唤醒沉睡之物的咒语", status: "locked" },
+                { name: "记忆增强", description: "提高记忆力的魔药配方", status: "locked" },
+                { name: "火焰之舞", description: "召唤小型火焰的基础咒语", status: "available" },
+                { name: "水之呼唤", description: "从空气中凝结水分的咒语", status: "learned" }
             ]
         };
 
-        // 游戏状态
         let gameState = {
             currentScreen: "main-menu",
             currentPuzzleIndex: 0,
             score: 0,
             combo: 0,
-            hints: 3
+            hints: 3,
+            failCount: 0,
+            showTutorial: true,
+            completedPuzzles: []
         };
 
-        // 音效
-        const sounds = {
-            click: new Audio("click.mp3"),
-            correct: new Audio("correct.mp3"),
-            incorrect: new Audio("incorrect.mp3"),
-            complete: new Audio("complete.mp3")
-        };
-
-        // DOM元素
         const mainMenu = document.getElementById("main-menu");
         const gameScreen = document.getElementById("game-screen");
         const endScreen = document.getElementById("end-screen");
@@ -427,6 +658,7 @@
         const playAgainBtn = document.getElementById("play-again-btn");
         const homeBtn = document.getElementById("home-btn");
         const owlHelper = document.getElementById("owl-helper");
+        const magicBook = document.getElementById("magic-book");
         const levelText = document.getElementById("level-text");
         const scoreText = document.getElementById("score-text");
         const comboText = document.getElementById("combo-text");
@@ -435,57 +667,76 @@
         const puzzleContainer = document.getElementById("puzzle-container");
         const optionsContainer = document.getElementById("options-container");
         const finalScore = document.getElementById("final-score");
+        const feedbackMessage = document.getElementById("feedback-message");
+        const tutorialOverlay = document.getElementById("tutorial-overlay");
+        const tutorialNext = document.getElementById("tutorial-next");
+        const bookModal = document.getElementById("book-modal");
+        const bookClose = document.getElementById("book-close");
+        const spellGrid = document.getElementById("spell-grid");
 
-        // 初始化游戏
         function initGame() {
             gameState = {
-                currentScreen: "main-menu",
+                currentScreen: "game-screen",
                 currentPuzzleIndex: 0,
                 score: 0,
                 combo: 0,
-                hints: 3
+                hints: 3,
+                failCount: 0,
+                showTutorial: true,
+                completedPuzzles: []
             };
             
+            if (gameState.showTutorial) {
+                tutorialOverlay.classList.remove("hidden");
+            }
+            
             updateUI();
+            updateSpellBook();
         }
 
-        // 更新UI
         function updateUI() {
-            // 更新分数和连击
             scoreText.textContent = gameState.score;
             comboText.textContent = gameState.combo;
             hintsText.textContent = gameState.hints;
             levelText.textContent = `第${gameState.currentPuzzleIndex + 1}章`;
             
-            // 显示当前谜题
             if (gameState.currentPuzzleIndex < gameData.puzzles.length) {
                 const puzzle = gameData.puzzles[gameState.currentPuzzleIndex];
                 storyText.textContent = puzzle.story;
                 
-                // 清空之前的内容
                 puzzleContainer.innerHTML = "";
                 optionsContainer.innerHTML = "";
                 
-                // 根据谜题类型显示不同的UI
                 if (puzzle.type === "fillBlank") {
-                    // 填空题
                     puzzle.options.forEach(option => {
                         const optionEl = document.createElement("div");
                         optionEl.className = "option";
                         optionEl.textContent = option;
+                        
+                        // 如果连续失败3次，高亮正确答案
+                        if (gameState.failCount >= 3 && option === puzzle.answer) {
+                            optionEl.classList.add("highlighted");
+                        }
+                        
                         optionEl.addEventListener("click", () => checkAnswer(option));
                         optionsContainer.appendChild(optionEl);
                     });
                 } else if (puzzle.type === "sentenceOrder") {
-                    // 句子排序题
                     const sentenceContainer = document.createElement("div");
                     sentenceContainer.className = "sentence-container";
                     
-                    // 打乱顺序
                     const shuffled = [...puzzle.sentences];
                     for (let i = shuffled.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                    }
+                    
+                    // 如果连续失败3次，按正确顺序排列
+                    if (gameState.failCount >= 3) {
+                        shuffled.sort((a, b) => {
+                            return puzzle.correctOrder[puzzle.sentences.indexOf(a)] - 
+                                   puzzle.correctOrder[puzzle.sentences.indexOf(b)];
+                        });
                     }
                     
                     shuffled.forEach((sentence, index) => {
@@ -494,6 +745,12 @@
                         sentenceEl.textContent = sentence;
                         sentenceEl.dataset.index = puzzle.sentences.indexOf(sentence);
                         sentenceContainer.appendChild(sentenceEl);
+                        
+                        // 添加拖拽功能
+                        sentenceEl.draggable = true;
+                        sentenceEl.addEventListener('dragstart', handleDragStart);
+                        sentenceEl.addEventListener('dragover', handleDragOver);
+                        sentenceEl.addEventListener('drop', handleDrop);
                     });
                     
                     puzzleContainer.appendChild(sentenceContainer);
@@ -508,45 +765,79 @@
             }
         }
 
-        // 检查填空题答案
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.index);
+            e.target.style.opacity = '0.4';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const sourceIndex = e.dataTransfer.getData('text/plain');
+            const sourceElement = document.querySelector(`.sentence[data-index="${sourceIndex}"]`);
+            const targetElement = e.target.closest('.sentence');
+            
+            if (sourceElement && targetElement) {
+                const container = sourceElement.parentNode;
+                const sourceRect = sourceElement.getBoundingClientRect();
+                const targetRect = targetElement.getBoundingClientRect();
+                
+                if (sourceRect.top < targetRect.top) {
+                    container.insertBefore(sourceElement, targetElement.nextSibling);
+                } else {
+                    container.insertBefore(sourceElement, targetElement);
+                }
+                
+                sourceElement.style.opacity = '1';
+            }
+        }
+
+        function showFeedback(message, isSuccess) {
+            feedbackMessage.textContent = message;
+            feedbackMessage.style.color = isSuccess ? '#4ade80' : '#f87171';
+            feedbackMessage.classList.add('show');
+            
+            setTimeout(() => {
+                feedbackMessage.classList.remove('show');
+            }, 2000);
+        }
+
         function checkAnswer(answer) {
             const puzzle = gameData.puzzles[gameState.currentPuzzleIndex];
             
             if (answer === puzzle.answer) {
-                // 答对了
-                sounds.correct.play();
+                showFeedback("魔法成功！", true);
                 gameState.score += 10;
                 gameState.combo++;
-                gameState.score += gameState.combo * 2; // 连击奖励
+                gameState.score += gameState.combo * 2;
+                gameState.failCount = 0;
+                gameState.completedPuzzles.push(gameState.currentPuzzleIndex);
                 
-                // 视觉反馈
-                storyText.classList.add("correct");
-                setTimeout(() => {
-                    storyText.classList.remove("correct");
-                    nextPuzzle();
-                }, 1000);
+                // 解锁相应的咒语
+                if (puzzle.answer === "星光闪烁") {
+                    gameData.spells[0].status = "learned";
+                } else if (puzzle.answer === "灵魂归位") {
+                    gameData.spells[1].status = "learned";
+                }
+                updateSpellBook();
+                
+                setTimeout(nextPuzzle, 1500);
             } else {
-                // 答错了
-                sounds.incorrect.play();
+                showFeedback("咒语错了，再试试！", false);
                 gameState.combo = 0;
-                
-                // 视觉反馈
-                storyText.classList.add("incorrect");
-                setTimeout(() => {
-                    storyText.classList.remove("incorrect");
-                }, 1000);
+                gameState.failCount++;
+                updateUI();
             }
-            
-            updateUI();
         }
 
-        // 检查句子排序
         function checkSentenceOrder() {
             const puzzle = gameData.puzzles[gameState.currentPuzzleIndex];
             const sentences = document.querySelectorAll(".sentence");
             const userOrder = Array.from(sentences).map(s => parseInt(s.dataset.index));
             
-            // 检查是否正确
             let correct = true;
             for (let i = 0; i < puzzle.correctOrder.length; i++) {
                 if (userOrder[i] !== puzzle.correctOrder[i]) {
@@ -556,98 +847,113 @@
             }
             
             if (correct) {
-                // 答对了
-                sounds.correct.play();
-                gameState.score += 10;
+                showFeedback("魔药制作成功！", true);
+                gameState.score += 15;
                 gameState.combo++;
-                gameState.score += gameState.combo * 2; // 连击奖励
+                gameState.score += gameState.combo * 2;
+                gameState.failCount = 0;
+                gameState.completedPuzzles.push(gameState.currentPuzzleIndex);
+                gameData.spells[2].status = "learned";
+                updateSpellBook();
                 
-                // 视觉反馈
-                storyText.classList.add("correct");
-                setTimeout(() => {
-                    storyText.classList.remove("correct");
-                    nextPuzzle();
-                }, 1000);
+                setTimeout(nextPuzzle, 1500);
             } else {
-                // 答错了
-                sounds.incorrect.play();
+                showFeedback("顺序不对，魔药爆炸了！", false);
                 gameState.combo = 0;
-                
-                // 视觉反馈
-                storyText.classList.add("incorrect");
-                setTimeout(() => {
-                    storyText.classList.remove("incorrect");
-                }, 1000);
+                gameState.failCount++;
+                updateUI();
             }
-            
-            updateUI();
         }
 
-        // 下一个谜题
         function nextPuzzle() {
             gameState.currentPuzzleIndex++;
-            
             if (gameState.currentPuzzleIndex >= gameData.puzzles.length) {
-                // 游戏结束
                 endGame();
             } else {
                 updateUI();
             }
         }
 
-        // 结束游戏
         function endGame() {
-            sounds.complete.play();
             showScreen("end-screen");
             finalScore.textContent = `最终得分: ${gameState.score}`;
         }
 
-        // 显示屏幕
         function showScreen(screenId) {
             mainMenu.classList.add("hidden");
             gameScreen.classList.add("hidden");
             endScreen.classList.add("hidden");
-            
             document.getElementById(screenId).classList.remove("hidden");
             gameState.currentScreen = screenId;
         }
 
-        // 使用提示
         function useHint() {
             if (gameState.hints > 0) {
                 gameState.hints--;
                 const puzzle = gameData.puzzles[gameState.currentPuzzleIndex];
-                alert(`提示: ${puzzle.hint}`);
+                showFeedback(`提示: ${puzzle.hint}`, true);
                 updateUI();
             } else {
-                alert("你没有足够的星尘了！");
+                showFeedback("你的提示星尘用完了！", false);
             }
         }
 
-        // 事件监听
+        function updateSpellBook() {
+            spellGrid.innerHTML = "";
+            gameData.spells.forEach(spell => {
+                const card = document.createElement("div");
+                card.className = "spell-card";
+                
+                const name = document.createElement("div");
+                name.className = "spell-name";
+                name.textContent = spell.name;
+                
+                const desc = document.createElement("div");
+                desc.className = "spell-desc";
+                desc.textContent = spell.description;
+                
+                const status = document.createElement("div");
+                status.className = "spell-status";
+                
+                if (spell.status === "learned") {
+                    status.classList.add("status-learned");
+                    status.textContent = "已学会";
+                } else if (spell.status === "available") {
+                    status.classList.add("status-available");
+                    status.textContent = "可学习";
+                } else {
+                    status.classList.add("status-locked");
+                    status.textContent = "待解锁";
+                }
+                
+                card.appendChild(name);
+                card.appendChild(desc);
+                card.appendChild(status);
+                spellGrid.appendChild(card);
+            });
+        }
+
         startBtn.addEventListener("click", () => {
-            sounds.click.play();
             showScreen("game-screen");
             initGame();
         });
 
         playAgainBtn.addEventListener("click", () => {
-            sounds.click.play();
             showScreen("game-screen");
             initGame();
         });
 
-        homeBtn.addEventListener("click", () => {
-            sounds.click.play();
-            showScreen("main-menu");
+        homeBtn.addEventListener("click", () => showScreen("main-menu"));
+        owlHelper.addEventListener("click", useHint);
+        
+        tutorialNext.addEventListener("click", () => {
+            tutorialOverlay.classList.add("hidden");
+            gameState.showTutorial = false;
         });
 
-        owlHelper.addEventListener("click", () => {
-            sounds.click.play();
-            useHint();
-        });
+        magicBook.addEventListener("click", () => bookModal.classList.add("show"));
+        bookClose.addEventListener("click", () => bookModal.classList.remove("show"));
 
-        // 初始化游戏
         initGame();
     </script>
 </body>
